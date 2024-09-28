@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Suggestions</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff6347;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background-color: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        ul li:hover {
+            background-color: #c3cfe2;
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            border: 2px solid #ff6347;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #ff6347;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #e5533d;
+        }
+
+        #next-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none; /* Initially hidden */
+        }
+
+        #next-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Food Suggestions</h1>
+
+    <!-- Suggestions will be displayed here -->
+    <ul id="suggestion-list">
+        <!-- Suggestions loaded from localStorage will be displayed here -->
+    </ul>
+
+    <!-- Suggestion form -->
+    <form id="suggestion-form">
+        <input type="text" id="suggestion-input" placeholder="Type your food suggestion here..." required>
+        <button type="submit">Submit Suggestion</button>
+    </form>
+
+    <!-- Next button to navigate to thank you page -->
+    <button id="next-button" onclick="navigateToThankYou()">Next</button>
+
+    <script>
+        // Get elements
+        const suggestionForm = document.getElementById('suggestion-form');
+        const suggestionInput = document.getElementById('suggestion-input');
+        const suggestionList = document.getElementById('suggestion-list');
+        const nextButton = document.getElementById('next-button');
+
+        // Load suggestions from localStorage and display them
+        document.addEventListener('DOMContentLoaded', function() {
+            const suggestions = JSON.parse(localStorage.getItem('suggestions')) || [];
+            if (suggestions.length > 0) {
+                nextButton.style.display = 'block'; // Show Next button if suggestions exist
+            }
+            suggestions.forEach(suggestion => displaySuggestion(suggestion));
+        });
+
+        // Add event listener for form submission
+        suggestionForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the form from refreshing the page
+
+            // Get the suggestion input value
+            const newSuggestion = suggestionInput.value;
+
+            // Save the new suggestion in localStorage
+            let suggestions = JSON.parse(localStorage.getItem('suggestions')) || [];
+            suggestions.push(newSuggestion);
+            localStorage.setItem('suggestions', JSON.stringify(suggestions));
+
+            // Display the new suggestion on the page
+            displaySuggestion(newSuggestion);
+
+            // Clear the input field
+            suggestionInput.value = '';
+
+            // Show the next button
+            nextButton.style.display = 'block';
+        });
+
+        // Function to display a suggestion
+        function displaySuggestion(suggestion) {
+            const li = document.createElement('li');
+            li.textContent = suggestion;
+            suggestionList.appendChild(li);
+        }
+
+        // Function to navigate to the Thank You page
+        function navigateToThankYou() {
+            window.location.href = 'thankyou.html'; // Redirect to the thank you page
+        }
+    </script>
+
+</body>
+</html>
